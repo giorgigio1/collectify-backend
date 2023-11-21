@@ -44,17 +44,31 @@ router.post("/unblock-users", async (req, res) => {
 });
 
 router.post("/make-admin", async (req, res) => {
-  const { ids, enable } = req.body;
-
+  const ids = req.body;
   try {
     const users = await User.updateMany(
       { _id: { $in: ids } },
-      { admin: enable }
+      { role: "admin" }
     );
     res.status(200).json(users);
   } catch (error) {
     console.error("Failed to make users admin:", error);
     res.status(500).json({ message: "Failed to make users admin" });
+  }
+});
+
+router.post("/remove-admin", async (req, res) => {
+  const ids = req.body;
+
+  try {
+    const users = await User.updateMany(
+      { _id: { $in: ids } },
+      { role: "user" }
+    );
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Failed to remove users admin:", error);
+    res.status(500).json({ message: "Failed to remove users admin" });
   }
 });
 
