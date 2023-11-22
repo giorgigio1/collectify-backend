@@ -45,10 +45,9 @@ router.post("/register", async (req, res) => {
       status: "active",
     });
 
-    // თავიდან მხოლოდ პირველი რეგისტრირებული user ხდება ადმინი
-    // შემდეგ ამ ადმინს შეუძლია სხვა user-ები გახადოს ადმინი
-    const totalUsers = await User.count({});
-    if (totalUsers === 0) {
+    const totalAdmins = await User.countDocuments({ role: "admin" });
+
+    if (totalAdmins === 0) {
       newUser.role = "admin";
     }
 

@@ -1,5 +1,6 @@
 import express from "express";
 import { User } from "../models/user";
+import { AuthRequest } from "../middleware/auth";
 
 export const router = express.Router();
 
@@ -8,6 +9,17 @@ router.get("/fetch-users", async (req, res) => {
     const users = await User.find({}, { password: 0 });
 
     res.status(200).json(users);
+  } catch (error) {
+    console.error("User data fetch error:", error);
+    res.status(500).json({ message: "Failed to fetch user data" });
+  }
+});
+
+router.get("/fetch-user", async (req: AuthRequest, res) => {
+  try {
+    const { user } = req.session;
+
+    res.status(200).json(user);
   } catch (error) {
     console.error("User data fetch error:", error);
     res.status(500).json({ message: "Failed to fetch user data" });

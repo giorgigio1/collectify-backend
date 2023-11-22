@@ -1,13 +1,13 @@
 import express from "express";
 import { Card } from "../models/card";
 import { AuthRequest } from "../middleware/auth";
-import { User } from "../models/user";
+import { Collection } from "../models/collection";
 
 export const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const cards = await Card.find({});
+    const cards = Card.find({});
 
     res.status(200).json(cards);
   } catch (error) {
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req: AuthRequest, res) => {
-  const { name, description, image, topic, authorId } = req.body;
+  const { name, description, image, topic, collectionId, authorId } = req.body;
   const { user } = req.session;
 
   // თუ ადმინია მარტო იმ შემთხვევაში გამოიყენე body-ში გადმოცემული authorId
@@ -32,10 +32,16 @@ router.post("/", async (req: AuthRequest, res) => {
       image,
       author,
     });
+    const cardDocument = await card.save();
+    const cardId = cardDocument._id;
 
-    await card.save();
+    const result = await Collection.findOneAndUpdate(
+      { _id: collectionId },
+      { $push: { cards: cardId } },
+      { returnDocument: "after" }
+    ).populate("cards");
 
-    res.status(200).json(card);
+    res.status(200).json(result);
   } catch (error) {
     console.error("Failed to create card:", error);
     res.status(500).json({ message: "Failed to create card" });

@@ -1,18 +1,17 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
-  fullname: String,
-  description: String,
+  name: String,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  likedBy: [
+  cards: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Card",
     },
   ],
 });
 
-export const Item = mongoose.model("Item", schema);
+export const Collection = mongoose.model("Collection", schema);
