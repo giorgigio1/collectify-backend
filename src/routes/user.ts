@@ -4,22 +4,23 @@ import { AuthRequest } from "../middleware/auth";
 
 export const router = express.Router();
 
-router.get("/fetch-users", async (req, res) => {
+router.get("/fetch-user", async (req: AuthRequest, res) => {
   try {
-    const users = await User.find({}, { password: 0 });
+    const { user } = req.session;
+    user.password = "";
 
-    res.status(200).json(users);
+    res.status(200).json(user);
   } catch (error) {
     console.error("User data fetch error:", error);
     res.status(500).json({ message: "Failed to fetch user data" });
   }
 });
 
-router.get("/fetch-user", async (req: AuthRequest, res) => {
+router.get("/fetch-users", async (req, res) => {
   try {
-    const { user } = req.session;
+    const users = await User.find({}, { password: 0 });
 
-    res.status(200).json(user);
+    res.status(200).json(users);
   } catch (error) {
     console.error("User data fetch error:", error);
     res.status(500).json({ message: "Failed to fetch user data" });
@@ -56,7 +57,8 @@ router.post("/unblock-users", async (req, res) => {
 });
 
 router.post("/make-admin", async (req, res) => {
-  const ids = req.body;
+  const { ids } = req.body;
+
   try {
     const users = await User.updateMany(
       { _id: { $in: ids } },
@@ -70,7 +72,7 @@ router.post("/make-admin", async (req, res) => {
 });
 
 router.post("/remove-admin", async (req, res) => {
-  const ids = req.body;
+  const { ids } = req.body;
 
   try {
     const users = await User.updateMany(
@@ -79,8 +81,8 @@ router.post("/remove-admin", async (req, res) => {
     );
     res.status(200).json(users);
   } catch (error) {
-    console.error("Failed to remove users admin:", error);
-    res.status(500).json({ message: "Failed to remove users admin" });
+    console.error("Failed to make users admin:", error);
+    res.status(500).json({ message: "Failed to make users admin" });
   }
 });
 

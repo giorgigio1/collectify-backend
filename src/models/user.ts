@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export type User = {
   id: string;
-  fullname: string;
+  fullName: string;
   email: string;
   password: string;
   role: "user" | "admin";
@@ -14,7 +14,7 @@ export type User = {
 };
 
 const schema = new mongoose.Schema<User>({
-  fullname: String,
+  fullName: String,
   email: { type: String, unique: true },
   password: String,
   lastLogin: Date,

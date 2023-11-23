@@ -16,7 +16,7 @@ async function login(user) {
     {
       userId: user._id,
       email: user.email,
-      name: user.fullname,
+      name: user.fullName,
       status: user.status,
     },
     "your_secret_key",
@@ -33,13 +33,13 @@ async function login(user) {
 }
 
 router.post("/register", async (req, res) => {
-  const { fullname, email, password } = req.body;
+  const { fullName, email, password } = req.body;
 
   try {
     const hashedPassword = hash(password);
 
     const newUser = new User({
-      fullname,
+      fullName,
       email,
       password: hashedPassword,
       status: "active",
