@@ -38,3 +38,7 @@ app.use("/auth", authRoutes);
 app.use("/user", authMiddleware, userRoutes);
 app.use("/card", authMiddleware, cardRoutes);
 app.use("/collection", collectionRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+})
