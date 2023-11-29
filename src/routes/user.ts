@@ -57,7 +57,7 @@ router.post("/unblock-users", async (req, res) => {
 });
 
 router.post("/make-admin", async (req, res) => {
-  const { ids } = req.body;
+  const ids  = req.body;
 
   try {
     const users = await User.updateMany(
@@ -72,7 +72,7 @@ router.post("/make-admin", async (req, res) => {
 });
 
 router.post("/remove-admin", async (req, res) => {
-  const { ids } = req.body;
+  const ids  = req.body;
 
   try {
     const users = await User.updateMany(
